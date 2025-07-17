@@ -2,6 +2,7 @@ package com.javatechie.smartparking.entry;
 
 import com.javatechie.smartparking.allocation.Slot;
 import com.javatechie.smartparking.allocation.SlotAllocationPort;
+import com.javatechie.smartparking.events.VehicleEnteredEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 

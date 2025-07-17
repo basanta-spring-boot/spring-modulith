@@ -1,22 +1,31 @@
 package com.javatechie.smartparking.entry;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.javatechie.smartparking.events.VehicleExitedEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 
 @Service
 public class ExitService {
-    @Autowired private ParkingEntryRepository repository;
-    @Autowired private ApplicationEventPublisher publisher;
+
+    private final ParkingEntryRepository repository;
+    private final ApplicationEventPublisher publisher;
+
+    public ExitService(ParkingEntryRepository repository,
+                       ApplicationEventPublisher publisher) {
+        this.repository = repository;
+        this.publisher = publisher;
+    }
 
     public void vehicleExit(String vehicleNumber) {
         ParkingEntry entry = repository.findByVehicleNumberAndActiveTrue(vehicleNumber)
-                .orElseThrow(() -> new RuntimeException("No active parking found!"));
+                .orElseThrow(() -> new RuntimeException("🚫 No active entry found for vehicle " + vehicleNumber));
+
         entry.setExitTime(LocalDateTime.now());
         entry.setActive(false);
         repository.save(entry);
 
-        publisher.publishEvent(new VehicleExitedEvent(vehicleNumber, entry.getEntryTime(), entry.getExitTime()));
+        publisher.publishEvent(new VehicleExitedEvent(vehicleNumber,entry.getEntryTime(), entry.getExitTime()));
     }
 }

@@ -1,6 +1,7 @@
 package com.javatechie.smartparking.billing;
 
-import com.javatechie.smartparking.entry.VehicleExitedEvent;
+import com.javatechie.smartparking.events.VehicleExitedEvent;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -9,9 +10,10 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Component
+@RequiredArgsConstructor
 public class BillingService {
 
-    @Autowired private BillingRepository repository;
+    private BillingRepository repository;
 
     @EventListener
     public void handleExit(VehicleExitedEvent event) {

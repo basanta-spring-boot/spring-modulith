@@ -1,17 +1,18 @@
 package com.javatechie.smartparking.allocation;
 
-import com.javatechie.smartparking.entry.VehicleEnteredEvent;
-import com.javatechie.smartparking.entry.VehicleExitedEvent;
+import com.javatechie.smartparking.events.VehicleEnteredEvent;
+import com.javatechie.smartparking.events.VehicleExitedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Component
-public class SlotAllocator implements SlotAllocationPort{
+@Service
+public class SlotAllocator implements SlotAllocationPort {
 
-    @Autowired private SlotRepository slotRepo;
+    @Autowired
+    private SlotRepository slotRepo;
 
     @EventListener
     public void handleEntry(VehicleEnteredEvent event) {
@@ -26,12 +27,13 @@ public class SlotAllocator implements SlotAllocationPort{
 
     @EventListener
     public void handleExit(VehicleExitedEvent event) {
-        slotRepo.findByVehicleNumber(event.vehicleNumber()).ifPresent(slot -> {
-            slot.setAvailable(true);
-            slot.setVehicleNumber(null);
-            slotRepo.save(slot);
-            System.out.println("🅿️ Slot " + slot.getSlotCode() + " freed for vehicle " + event.vehicleNumber());
-        });
+        Slot slot = slotRepo.findByVehicleNumber(event.vehicleNumber())
+                .orElseThrow(() -> new RuntimeException("🚫 No slot found for vehicle " + event.vehicleNumber()));
+        slot.setAvailable(true);
+        slot.setVehicleNumber(null);
+        slotRepo.save(slot);
+
+        System.out.println("🅿️ Freed Slot " + slot.getSlotCode() + " from vehicle " + event.vehicleNumber());
     }
 
     @Override

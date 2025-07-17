@@ -1,20 +1,20 @@
 package com.javatechie.smartparking.notification;
 
-import com.javatechie.smartparking.entry.VehicleEnteredEvent;
-import com.javatechie.smartparking.entry.VehicleExitedEvent;
+import com.javatechie.smartparking.events.VehicleEnteredEvent;
+import com.javatechie.smartparking.events.VehicleExitedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class NotificationService {
 
     @EventListener
-    public void onEntry(VehicleEnteredEvent event) {
-        System.out.println("📢 Notification: Vehicle " + event.vehicleNumber() + " entered at " + event.entryTime());
+    public void onVehicleEntered(VehicleEnteredEvent event) {
+        System.out.println("🚗 Vehicle " + event.vehicleNumber() + " entered in slot " + event.slotCode());
     }
 
     @EventListener
-    public void onExit(VehicleExitedEvent event) {
-        System.out.println("📢 Notification: Vehicle " + event.vehicleNumber() + " exited at " + event.exitTime());
+    public void onVehicleExit(VehicleExitedEvent event) {
+        System.out.println("🚙 Vehicle " + event.vehicleNumber() + " exited");
     }
 }
