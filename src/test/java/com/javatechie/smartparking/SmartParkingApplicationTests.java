@@ -11,10 +11,11 @@ class SmartParkingApplicationTests {
 	@Test
 	void  writeDocumentation()  {
 		var modules = ApplicationModules.of(SmartParkingApplication.class)
-				.verify(); // optional: ensures module boundaries are respected
-		new Documenter(modules)
-				.writeModulesAsPlantUml()       // generates info for all modules
-				.writeIndividualModulesAsPlantUml(); // docs per module
+				.verify();
+//		new Documenter(modules)
+//				.writeModulesAsPlantUml()
+//				.writeIndividualModulesAsPlantUml();
+//		new Documenter(modules).writeDocumentation();
 	}
 
 }

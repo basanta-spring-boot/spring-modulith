@@ -10,10 +10,13 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Component
-@RequiredArgsConstructor
 public class BillingService {
 
-    private BillingRepository repository;
+    private final BillingRepository repository;
+
+    public BillingService(BillingRepository repository) {
+        this.repository = repository;
+    }
 
     @EventListener
     public void handleExit(VehicleExitedEvent event) {
